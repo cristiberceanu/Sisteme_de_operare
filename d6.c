@@ -11,6 +11,15 @@ static void sterge(const char * dir_name)
   DIR * d;
   d = opendir(dir_name);
 
+  /* 
+  * Verificam daca folderul poate fi deschis.
+  */
+  if(!d)
+  {
+    fprintf (stderr, "Nu pot deschide directorul'%s': %s\n",
+     dir_name, strerror (errno));
+    exit(1);
+  }
   while(1){
     struct dirent * child;
     char * d_name;
@@ -55,8 +64,13 @@ static void sterge(const char * dir_name)
       }
     }
   }
-/* Inchide folder. */
-  closedir(d);
+/* Verificam daca folder-ul se poate inchide. */
+  if(closedir(d)){
+    fprintf (stderr, "Nu pot inchide '%s': %s\n",
+     dir_name, strerror (errno));
+    exit(1);
+  }
+  
 }
 
 int main(int argc, char const *argv[])
